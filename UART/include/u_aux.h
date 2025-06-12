@@ -5,7 +5,6 @@
 #ifndef AUX_H
 #define AUX_H
 #include <stdbool.h>
-#include <stddef.h>
 
 #define MAX_BUFFER_SIZE 256
 

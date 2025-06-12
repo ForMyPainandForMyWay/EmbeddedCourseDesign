@@ -4,8 +4,6 @@
 
 #ifndef PAINT_H
 #define PAINT_H
-#include <stdbool.h>
-#include <stddef.h>
 
 #include "l_aux.h"
 #include "array.h"
@@ -20,10 +18,25 @@ extern queue line;
 
 void show();
 
-bool brush_screen(unsigned char red,
-                  unsigned char green,
-                  unsigned char blue);
+typedef struct args {
+    unsigned char red;
+    unsigned char green;
+    unsigned char blue;
+    bool Islfet;
+}args;
 
+
+void init_args(
+    args* arg,
+    unsigned char red,
+    unsigned char green,
+    unsigned char blue,
+    bool Isleft);
+
+bool brush_screen(
+    unsigned char red,
+    unsigned char green,
+    unsigned char blue);
 void paint_cross();
 
 void paint_pixel_rect(

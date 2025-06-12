@@ -2,7 +2,6 @@
 // Created by 冬榆 on 25-6-6.
 //
 
-// const struct fb_var_screeninfo info, unsigned char* framebuffer, size_t bytes_per_pixel
 #include "l_aux.h"
 
 #include <fcntl.h>
@@ -30,7 +29,6 @@ bool init_screen() {
         close(lcdfd);
         return false;
     }
-
     printf("Resolution: %dx%d, %d bits/pixel\n",
            info.xres, info.yres, info.bits_per_pixel);
 

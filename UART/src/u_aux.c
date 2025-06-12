@@ -10,9 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <termios.h>
-#include <tgmath.h>
 #include <unistd.h>
-#include <math.h>
 
 
 // 初始化串口通信
@@ -26,8 +24,7 @@ bool init_uart(const char *filename) {
 
     // 通讯设置
     tcgetattr(uartfd, &option); //获取当前的串口设置
-    cfsetispeed(&option, B115200); // 设置输入波特率为 115200
-    cfsetospeed(&option, B115200);
+    cfsetispeed(&option, B9600); // 设置输入波特率为 9600
     option.c_cflag &= ~CSIZE;
     option.c_cflag |= CS8; // 数据位为8位
     option.c_cflag &= ~PARENB; // 无奇偶校验
@@ -38,6 +35,10 @@ bool init_uart(const char *filename) {
     tcsetattr(uartfd, TCSANOW, &option); // 写入配置
 
     // 初始化缓冲区
+    uart_buffer_read = malloc(MAX_BUFFER_SIZE * sizeof(unsigned char));
+    uart_buffer_write = malloc(MAX_BUFFER_SIZE * sizeof(unsigned char));
+
+
     memset(uart_buffer_read, 0, MAX_BUFFER_SIZE * sizeof(unsigned char));
     memset(uart_buffer_write, '\n', MAX_BUFFER_SIZE * sizeof(unsigned char));
     nums = 0;
@@ -56,13 +57,40 @@ bool clean_uart() {
 // 从串口读取数据,持续执行直到获取到数据为止
 unsigned read_uart(const unsigned char end_char) {
     size_t index = 0;
+
+    // // show();
+    // brush_screen(0x00, 0x00, 0x00);
+    // int x, y;
+    // x = 250;y=200;
+    // unsigned char* pix = testxxx(x, y);
+    // pix[0] = 0x00;
+    // pix[1] = 0x00;
+    // pix[2] = 0xff;
+    // show();
+
     while (index < MAX_BUFFER_SIZE) {
+        // pix[0] = 0x00;
+        // pix[1] = 0xff;
+        // pix[2] = 0x00;
+        // show();
+
         unsigned char c;
         const ssize_t n = read(uartfd, &c, 1); // 逐字节读取
-        if (n < 0) return false;
+        // paint_cross();
+        // show();
+
+        // nums_ ++;
+        if (n < 0) {
+            return false;
+        }
         if (n > 0) {
             uart_buffer_read[index++] = c;
-            if (c == end_char) {
+            if (c == end_char || c == '\n' || c == '\r') {
+            // pix = testxxx(x+30, y+30);
+            // pix[0] = 0xff;
+            // pix[1] = 0x00;
+            // pix[2] = 0;
+            // show();
                 nums = index;
                 return (unsigned) index; // 遇到结束符
             }
@@ -85,7 +113,7 @@ bool write_uart(const unsigned char end_char) {
         }
         if (byte == end_char) break; // 当遇到终止符时停止发送
         i++;
-        usleep(20); // 物理层延迟
+        usleep(20); // 延迟
     }
     return true;
 }
@@ -93,9 +121,7 @@ bool write_uart(const unsigned char end_char) {
 
 // 展示数据，将读缓冲区的内容输出
 void show_msg() {
-    printf("Message received:\n");
     for (size_t i = 0; i < nums; i++) printf("%c", uart_buffer_read[i]);
-    printf("\n");
 }
 
 
@@ -117,10 +143,14 @@ float ft2float(const int totalLen, const int pointPlace) {
     float fractor = 10;
     if (nums < totalLen) return 0;
     float result = 0;
+    int tff = 1;
     for (int i = 1; i < totalLen; i++) {
-        if (i != pointPlace - 1) result += pow_(fractor, abs(i - (pointPlace - 1))) * (int) uart_buffer_read[i];
-        else fractor = 0.1f;
+        if (i != pointPlace - 1)
+            result += pow_(fractor, abs(i - (pointPlace - 1))-tff) * (uart_buffer_read[i]-48);
+        else {
+            fractor = 0.1f;
+            tff = 0;
+        };
     }
-    // result = uart_buffer_read[0]=='+' ? result : -result;
     return uart_buffer_read[0] == '+' ? result : -result;
 }

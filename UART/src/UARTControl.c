@@ -4,19 +4,22 @@
 
 #include "UARTControl.h"
 
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
 
 // 启动函数
 void u_start() {
-    init_uart("/dev/s3c2410_serial1");
+    init_uart("/dev/s3c2410_serial0");
 }
 
 
 // 关闭函数
 void u_stop() {
     close(uartfd);
+    free(uart_buffer_read);
+    free(uart_buffer_write);
 }
 
 
@@ -31,7 +34,7 @@ bool send(const unsigned char *msg, const unsigned char end_char) {
 
 // 接收函数,每次调用写入缓冲区而(不是直接返回)
 unsigned recieve(const unsigned char end_char) {
-    const unsigned nums = read_uart(end_char);
+    read_uart(end_char);
     return nums;
 }
 
