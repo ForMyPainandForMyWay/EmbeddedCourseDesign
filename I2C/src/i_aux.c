@@ -44,14 +44,7 @@ float read_temperature() {
         return -1000.0f;
     }
     // 将高8位和低8位合并为16进制，LM75是高11位有效，舍弃低5位
-    // int temp_raw = ((buf[0] << 8) | buf[1]) >> 7;
-    // if (temp_raw & 0x100) {  // 第九位是符号位，当负数，补码处理
-    //     temp_raw = temp_raw - 512;
-    // }
-    // return temp_raw * 0.5f;
     int16_t data = (int16_t)(buf[0] << 8 | buf[1]);
-    data >>= 5;
+    data >>= 5;  // 数值右移
     return (float)data * 0.125f;
 }
-
-
