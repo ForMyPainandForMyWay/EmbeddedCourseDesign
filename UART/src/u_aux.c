@@ -146,7 +146,7 @@ float ft2float(const int totalLen, const int pointPlace) {
     int tff = 1;
     for (int i = 1; i < totalLen; i++) {
         if (i != pointPlace - 1)
-            result += pow_(fractor, abs(i - (pointPlace - 1))-tff) * (uart_buffer_read[i]-48);
+            result += pow_(fractor, abs(i - (pointPlace - 1))-tff) * (float)(uart_buffer_read[i]-48);
         else {
             fractor = 0.1f;
             tff = 0;

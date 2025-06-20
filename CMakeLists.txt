@@ -3,8 +3,6 @@ project(TOTAL C)
 
 # 设置交叉编译工具链
 set(CMAKE_C_COMPILER arm-linux-gnueabi-gcc)  # Arm32
-#set(CMAKE_C_COMPILER "arm-linux-gnueabi-gcc-8")  # 旧版编译器
-#set(CMAKE_C_COMPILER aarch64-linux-gnu-gcc)  # Arm64
 
 set(CMAKE_CROSSCOMPILING ON)
 set(CMAKE_SYSTEM_NAME Linux)
@@ -38,15 +36,3 @@ target_link_libraries(LCD PUBLIC pthread)
 
 add_executable(${PROJECT_NAME} ${TOTAL_SOURCES})
 target_link_libraries(TOTAL PRIVATE LCD UART I2C)
-
-
-# 再编译一份
-set(EXECUTABLE_OUTPUT_PATH  "/home/dongyu")
-set(LIBRARY_OUTPUT_PATH  "/home/dongyu")
-add_library(uart SHARED ${UART_SOURCES})
-add_library(lcd SHARED ${LCD_SOURCES})
-add_library(i2c SHARED ${I2C_SOURCES})
-add_executable(total ${TOTAL_SOURCES})
-target_link_libraries(total PRIVATE lcd uart i2c)
-
-#add_executable(uart_test ${UART_SOURCES})

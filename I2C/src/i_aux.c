@@ -11,7 +11,7 @@
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
 #define I2C_DEV "/dev/i2c-2"
-#define LM75A_ADDR 0x48         // I2C 地址
+#define LM75A_ADDR 0x48  // I2C 地址
 
 
 // 初始化

@@ -1,13 +1,11 @@
 //
 // Created by 冬榆 on 25-6-6.
 //
-#include <stdio.h>
 #include <unistd.h>
 
 #include "UARTControl.h"
 #include "LCDControl.h"
 #include "I2CControl.h"
-#include "paint.h"
 
 // 温度显示
 int main() {
@@ -16,15 +14,7 @@ int main() {
     i_start();
     test_lcd();
     while (true) {
-        // recieve('\n');
-        // show_msg();
-        // if (nums==1) continue;
-        // const float temp = getFloat(8, 5);
-
-        // 读取温度
-        // float temp = read_temperature(fd) * 3;
-        const float temp = getFloat_i() * 3;
-        // printf("%.2f\n", temp);
+        const float temp = getFloat_i();
         // 屏幕刷新
         push((int)temp);
         refresh();
